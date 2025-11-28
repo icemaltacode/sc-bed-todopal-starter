@@ -1,0 +1,1 @@
+const BASE_URI = '/api/todopal/api/';
