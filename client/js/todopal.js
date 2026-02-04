@@ -1,1 +1,1 @@
-const BASE_URI = '/api/todopal/api/';
+const BASE_URI = '/todopal/api/';

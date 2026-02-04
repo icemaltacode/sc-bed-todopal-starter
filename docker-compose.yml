@@ -5,8 +5,19 @@ services:
       - "8000:80"
     volumes:
       - ./:/var/www/html
+      - ./docker/conf/api.conf:/etc/nginx/conf.d/api.conf
     depends_on:
       - php
+
+  client:
+    image: ghcr.io/icemaltacode/sc-bed-nginx:latest
+    ports:
+      - "8001:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/conf/client.conf:/etc/nginx/conf.d/client.conf
+    depends_on:
+      - web
 
   php:
     image: ghcr.io/icemaltacode/sc-bed-php:latest
@@ -34,7 +45,7 @@ services:
 
   print-status:
     image: busybox
-    command: "echo '---\nSERVER RUNNING AT http://localhost:8000. USE CTRL+C TO TERMINATE.\n---'"
+    command: "echo '---\nAPI RUNNING AT http://localhost:8000/todopal/api/\nCLIENT RUNNING AT http://localhost:8001\nUSE CTRL+C TO TERMINATE.\n---'"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -42,7 +53,8 @@ services:
         condition: service_started
       web:
         condition: service_started
+      client:
+        condition: service_started
 
 volumes:
   db_data:
-
